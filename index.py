@@ -5,7 +5,7 @@
 import os
 import requests
 import random
-from flask import Flask, render_template, request
+from flask import Flask, render_template, url_for, request
 from flask import redirect
 from flask import jsonify, json
 
@@ -15,6 +15,7 @@ from city_types import Location
 import external
 import valid_cities
 import city_desc
+import email_support
 
 # variables
 app = Flask(__name__)
@@ -23,6 +24,22 @@ app = Flask(__name__)
 @app.route('/')
 def show_index():
   return render_template('index.html')
+
+
+# handle contact form
+@app.route('/contact', methods=['GET', 'POST'])
+def contact():
+    if request.method == 'GET':
+        return render_template('contact.html')
+    else:
+        name = request.form['name']
+        sender = request.form['email-address']
+        text_body = 'Message from: ' + name + "\n" + request.form['message']
+        subject = 'Email from ' + name
+        recipients = ['citysketch@outlook.com']
+        response = email_support.send_email(subject, sender, recipients, text_body)
+        return redirect(url_for('show_index'))
+
 
 # verify city using googleapis
 @app.route('/gmaps-json', methods=['GET'])
@@ -114,6 +131,17 @@ def tested_city():
     else:
         return jsonify({'response': 'false'})
 
+
+# return true if city input was tested
+@app.route('/submit-message', methods=['POST'])
+def submit_message():
+    print(request.form['name'])
+    subject = 'Test flask email'
+    sender = 'test@outlook.com'
+    recipients = ['citysketch@outlook.com']
+    text_body = 'Test text from flask app'
+    response = email_support.send_email(subject, sender, recipients, text_body)
+    return render_template('index.html')
 
 if __name__ == '__main__':
   app.debug = True # used for dev only

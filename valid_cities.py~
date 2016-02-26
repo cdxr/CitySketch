@@ -18,6 +18,5 @@ tested_list = ['Seoul', 'Delhi', 'Shanghai',
             'Los Angeles', 'Calcutta', 'Dhaka', 'Buenos Aires', 'Istanbul',
             'Rio de Janeiro', 'Shenzhen', 'Paris', 'Nagoya',
             'Lima', 'Chicago', 'Kinshasa', 'Tianjin', 'Chennai']
-tested_list.sort()
 
-twitter_ban = [‘Manila’]
+twitter_ban = ['Manila', 'Abuja']

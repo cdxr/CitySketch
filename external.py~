@@ -4,6 +4,7 @@
 import requests
 import oauth2
 import json
+import valid_cities
 from city_types import Location, LocalTime
 
 
@@ -174,12 +175,15 @@ def _lookup_time(location):
 Use twitter API and oauth2 authetication to obtain twitter search results
 """
 def _lookup_twitter(city):
-    query = city
-    count = '100'
-    url = 'https://api.twitter.com/1.1/search/tweets.json?q=%23' + query + '&count=' + count
-    key = '4898127648-hImwrcGlSCMqYvKIFl5BCZXAZAWunJ7FAtsrHYO'
-    secret = 'BcvtY6dYTlzFboKjQXtfaQYGHNZrZSJebzA3FzQVdXSiq'
-    return oauth_req(url, key, secret)
+    if city not in valid_cities.twitter_ban: #city in valid_cities.tested_list:
+        query = city
+        count = '100'
+        url = 'https://api.twitter.com/1.1/search/tweets.json?q=%23' + query + '&count=' + count
+        key = '4898127648-hImwrcGlSCMqYvKIFl5BCZXAZAWunJ7FAtsrHYO'
+        secret = 'BcvtY6dYTlzFboKjQXtfaQYGHNZrZSJebzA3FzQVdXSiq'
+        return oauth_req(url, key, secret)
+    else:
+        return ['twitter_not_allowed']
 
 # authenticate and obtain contents
 def oauth_req(url, key, secret, http_method="GET", post_body="", http_headers=None):
