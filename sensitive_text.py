@@ -11,7 +11,7 @@ def sensitive_text(text_input):
     return False
 
 def sensitive_word(word):
-    if word in excluded_words:
+    if word.lower() in excluded_words:
         return True
     return False
 

@@ -50,7 +50,8 @@ def test_sensitive_text():
     assert(sensitive_text(input_text) == True) # "test_sensitive_text test 7"
     input_text = 'Beautiful, is; @ass?better*than.any#   ok #bus8'
     assert(sensitive_text(input_text) == True) # "test_sensitive_text test 8"
-
+    input_text = '#  #'
+    assert(sensitive_text(input_text) == False) # "test_sensitive_text test 9"
 
 def test_email_support():
     # to do using get
