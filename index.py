@@ -36,8 +36,8 @@ def contact():
     else:
         name = request.form['name']
         sender = request.form['email-address']
-        text_body = 'Message from: ' + name + "\n" + request.form['message']
-        subject = 'Email from ' + name
+        text_body = 'From: ' + name + "\n\nMessage: " + request.form['message']
+        subject = 'From ' + name
         recipients = ['citysketch@outlook.com']
         try:
           response = email_support.send_email(app, subject, sender, recipients, text_body)
