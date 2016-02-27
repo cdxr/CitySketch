@@ -1,14 +1,7 @@
-from flask import Flask
-from flask_mail import Mail, Message
-from index import app
-import setup
+# functions containing email support
 
-app.config['MAIL_SERVER'] = setup.MAIL_SERVER
-app.config['MAIL_PORT'] = setup.MAIL_PORT
-app.config['MAIL_USERNAME'] = setup.MAIL_USERNAME
-app.config['MAIL_PASSWORD']= setup.MAIL_PASSWORD
-app.config['MAIL_USE_TLS'] = setup.MAIL_USE_TLS
-app.config['MAIL_USE_SSL'] = setup.MAIL_USE_SSL
+from flask.ext.mail import Mail, Message
+from index import app
 
 mail = Mail(app)
 

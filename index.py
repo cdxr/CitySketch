@@ -16,9 +16,11 @@ import external
 import valid_cities
 import city_desc
 import email_support
+import setup
 
 # variables
 app = Flask(__name__)
+setup.setup_env(app)
 
 # show index.html
 @app.route('/')
