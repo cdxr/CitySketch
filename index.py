@@ -39,7 +39,7 @@ def contact():
         text_body = 'Message from: ' + name + "\n" + request.form['message']
         subject = 'Email from ' + name
         recipients = ['citysketch@outlook.com']
-        response = email_support.send_email(subject, sender, recipients, text_body)
+        response = email_support.send_email(app, subject, sender, recipients, text_body)
         return redirect(url_for('show_index'))
 
 

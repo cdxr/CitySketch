@@ -1,11 +1,10 @@
 # functions containing email support
 
-from flask.ext.mail import Mail, Message
-from index import app
+from flask_mail import Mail, Message
 
-mail = Mail(app)
 
-def send_email(subject, sender, recipients, text_body):
+def send_email(app, subject, sender, recipients, text_body):
+    mail = Mail(app)
     msg = Message(subject, sender=sender, recipients=recipients)
     msg.body = text_body
     mail.send(msg)
