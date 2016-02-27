@@ -55,8 +55,24 @@
 
     </nav>
     <!-- END .navbar  -->
+    
 
-
+    <!-- flashing messages -->
+    <div class="container">
+      <div class="col-sm-6 col-sm-offset-3">
+	{% with messages = get_flashed_messages() %}
+	{% if messages %}
+	<div class=flashes>
+	  {% for message in messages %}
+          <h3><span class="label label-info"> {{ message }} </span> </h3>
+	  {% endfor %}
+	</div>
+	{% endif %}
+	{% endwith %}
+      </div>
+    </div>
+    
+    <!-- body -->
     {% block body_block %}{% endblock %}
 
 

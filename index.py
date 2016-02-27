@@ -6,7 +6,7 @@ import os
 import requests
 import random
 from flask import Flask, render_template, url_for, request
-from flask import redirect
+from flask import redirect, flash
 from flask import jsonify, json
 
 # custom imports
@@ -39,8 +39,13 @@ def contact():
         text_body = 'Message from: ' + name + "\n" + request.form['message']
         subject = 'Email from ' + name
         recipients = ['citysketch@outlook.com']
-        response = email_support.send_email(app, subject, sender, recipients, text_body)
-        return redirect(url_for('show_index'))
+        try:
+          response = email_support.send_email(app, subject, sender, recipients, text_body)
+          flash('Thank you for your message.')
+          return redirect(url_for('show_index'))
+        except:
+          flash('Invalid inputs. Please use a valid email address.')
+          return redirect(url_for('contact'))
 
 
 # verify city using googleapis

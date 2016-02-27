@@ -240,12 +240,14 @@ var updateWeather = function(lat, lon, unit) {
 	    var description = days[i]['weather'][0]['main'];
 	    var buttonID = "weather-button-" + i;
 	    var background = "static/img/weather_conditions/" + description + ".png";
-	    $('#weather-group').append('<button type="button" class="btn btn-primary weather-button" ' +
+	    $('#weather-group').append('<a href="http://openweathermap.org/find?q=' + currentCity.name 
+				       + '" target="_blank">' + 
+				       '<button type="button" class="btn btn-primary weather-button" ' +
 				       'id=' + buttonID + '">' + 
 				       date.getMonth() + ' / '  + date.getDate() + '</br>' +
 				       temp0dp  + unitSign + '</br>' +
 				       '<img src="' + background  + '"></br>' + 
-				       description + '</button>');
+				       description + '</button></a>');
 	}
     };
 
