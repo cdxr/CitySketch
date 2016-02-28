@@ -242,7 +242,7 @@ var updateWeather = function(lat, lon, unit) {
 	    var background = "static/img/weather_conditions/" + description + ".png";
 	    $('#weather-group').append('<a href="http://openweathermap.org/find?q=' + currentCity.name 
 				       + '" target="_blank">' + 
-				       '<button type="button" class="btn btn-primary weather-button" ' +
+				       '<button type="button" class="btn btn-default weather-button" ' +
 				       'id=' + buttonID + '">' + 
 				       date.getMonth() + ' / '  + date.getDate() + '</br>' +
 				       temp0dp  + unitSign + '</br>' +

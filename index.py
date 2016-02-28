@@ -35,7 +35,7 @@ def contact():
         return render_template('contact.html')
     else:
         name = request.form['name']
-        sender = request.form['email-address']
+        sender = (name, request.form['email-address'])
         text_body = 'From: ' + name + "\n\nMessage: " + request.form['message']
         subject = 'From ' + name
         recipients = ['citysketch@outlook.com']

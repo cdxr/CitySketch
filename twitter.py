@@ -12,7 +12,7 @@ Use twitter API and oauth2 authetication to obtain twitter search results
 def get_twitter(city):
     if city not in valid_cities.twitter_ban: #city in valid_cities.tested_list:
         query = city
-        count = '100'
+        count = '130'
         url = 'https://api.twitter.com/1.1/search/tweets.json?q=%23' + query + '&count=' + count
         key = '4898127648-hImwrcGlSCMqYvKIFl5BCZXAZAWunJ7FAtsrHYO'
         secret = 'BcvtY6dYTlzFboKjQXtfaQYGHNZrZSJebzA3FzQVdXSiq'
