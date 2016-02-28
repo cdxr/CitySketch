@@ -324,9 +324,8 @@ var updateScreen = function(city) {
     updateWeather(lat, lon, 'F');
  
     // Replace with Google maps
-    $('#google-img').attr('src', 'http://maps.googleapis.com/maps/api/streetview?' + 
-	'size=600x400&location=' + city.name);
-    
+    $('#gmaps-link').attr('href', 'https://www.google.com/maps/place/' + city.name);
+    $('#gmaps-link').html("Google Maps " + currentCity.name)
 };
 
 
