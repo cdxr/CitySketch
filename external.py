@@ -177,3 +177,18 @@ Use twitter API and oauth2 authetication to obtain twitter search results
 """
 def _lookup_twitter(city):
     return twitter.get_twitter(city)
+
+
+"""
+Use Flickr API to retrieve picture urls
+"""
+def _lookup_flickr(city_name):
+    url = 'https://api.flickr.com/services/rest/?method=flickr.photos.search'
+    params = {
+        'api_key': '617d4007458d800217fe1a355accf25d',
+        'api_sig': '25e0ef1dc219ea3a59afa28a821e7b93',
+        'tags': city_name,
+        'format': 'json',
+        'nojsoncallback': '1',
+    }
+    return _make_request(url, params)

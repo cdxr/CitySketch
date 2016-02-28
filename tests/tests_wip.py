@@ -29,38 +29,38 @@ def oauth_req():
     client = oauth2.Client(consumer, token)
     resp, content = client.request( url, method=http_method, body=post_body, headers=http_headers )
     return content
-    
     home_timeline = oauth_req( 'https://api.twitter.com/1.1/statuses/home_timeline.json', 'abcdefg', 'hijklmnop' )
 
 
 def test_sensitive_text():
-    input_text = 'Beautiful, is; better*than\nugly#car#bus1'
+    input_text = 'Car, is; better*than\nugly#car#bus1'
     assert(sensitive_text(input_text) == False) # "test_sensitive_text test 1"
-    input_text = 'Beautiful, is; better*than\sex#car#bus2'
+    input_text = 'sadfsdaf, is; betsdfasfter*than\sex#car#bus2'
     assert(sensitive_text(input_text) == True) # "test_sensitive_text test 2"
-    input_text = 'Beautiful, is; better*than.ass#car#bus3'
+    input_text = 'asdfasdf, is; bettasdfer*than.ass#car#bus3'
     assert(sensitive_text(input_text) == True) # "test_sensitive_text test 3"
-    input_text = 'Beautiful, is; better*than.any#ass#bus4'
+    input_text = 'asdfdfs, is; betasdfter*than.any#ass#bus4'
     assert(sensitive_text(input_text) == True) # "test_sensitive_text test 4"
-    input_text = 'Beautiful, is; better*than.any# ass#bus5'
+    input_text = 'sfasfsdfdsaf, is; besdftter*than.any# ass#bus5'
     assert(sensitive_text(input_text) == True) # "test_sensitive_text test 5"
-    input_text = 'Beautiful, is; better*than.any#   ass #bus6'
+    input_text = 'Be, is; better*thsfan.any#   ass #bus6'
     assert(sensitive_text(input_text) == True) # "test_sensitive_text test 6"
-    input_text = 'Beautiful, is; ?ass?better*than.any#   ok #bus7'
+    input_text = 'Basdf, is; ?ass?bettsadfer*than.any#   ok #bus7'
     assert(sensitive_text(input_text) == True) # "test_sensitive_text test 7"
-    input_text = 'Beautiful, is; @ass?better*than.any#   ok #bus8'
+    input_text = 'Basdfsdaf, is; @ass?besafdtter*than.any#   ok #bus8'
     assert(sensitive_text(input_text) == True) # "test_sensitive_text test 8"
     input_text = '#  #'
     assert(sensitive_text(input_text) == False) # "test_sensitive_text test 9"
 
-def test_email_support():
-    # to do using get
+def test_7():
     pass
+
+
 
 if __name__ == "__main__":
     #print(test_gmaps("Mexico City"))
     #print(test_autocomplete())
     #print(test_twitter("paris"))
     test_sensitive_text()
-    test_email_support()
+    test_7()
     

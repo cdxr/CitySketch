@@ -38,12 +38,12 @@ var updateCityTitle = function() {
 
 
 // given the city name, update description in jumbotron
-var updateCityDescription = function(city) {
+var updateCityDescription = function() {
 
     // Make a request for the description.
     var setText = function() {
        $.ajax({
-	   url: "city-description?" + 'city=' + city,
+	   url: "city-description?" + 'city=' + currentCity.name,
 	   dataType: "json",
 	   success: function(response) {
 	       $('#city-description').empty();
@@ -68,8 +68,8 @@ var updateCityDescription = function(city) {
 
 // ------------------------------------------------------------------------
 // updateWiki updates #wiki-accordion with wiki search articles
-var updateWiki = function(city) {
-    var city = city;
+var updateWiki = function() {
+    var city = currentCity.name;
 
     // update screen using resource
     var updateWikiScreen = function(response) {
@@ -120,10 +120,10 @@ var updateWiki = function(city) {
 // -------------------------------------------------------------------------------------------------
 
 
-
-
 // Update twitter feed
-var updateTwitter = function(city) {
+var updateTwitter = function() {
+    var city = currentCity.name;
+    // empty targets
     $('#twitter-content').empty();
     $('#twitter-link').empty();
     // Make a request for the description.
@@ -140,10 +140,9 @@ var updateTwitter = function(city) {
 	   else {
 	       var tweets = response['twitter-json']
 	       for (i = 0; i < tweets.length; i++) {
-		   var date = new Date(tweets[i][0]['date'])
+		   var date = tweets[i][0]['date'].split('\+')[0] + " (GMT)"; // get date
 		   // output item to be appended
-		   var item = '<p><span class="twitter-date">' + date.getMonth() + "/" + date.getDate() + 
-		       "/" + date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes() + "</span></br>" +
+		   var item = '<p><span class="twitter-date">' + date + "</span></br>" +
 		       tweets[i][1]['text'];
 		   
 		   // append image, if exists
@@ -166,10 +165,8 @@ var updateTwitter = function(city) {
 // -------------------------------------------------------------------------------------------------
 
 
-
 // updateNYT updates #nyt-accordion with wiki search articles
-var updateNYT = function(city) {
-
+var updateNYT = function() {
     // update screen using resource
     var updateNYTScreen = function(response) {
 	//console.log(response['response']['docs']);
@@ -180,7 +177,7 @@ var updateNYT = function(city) {
 		var title = article['headline']['main'];
 		var contents = article['snippet'] + '<a href="' + 
 		    article['web_url'] + '" target="_blank"> [details]</a>';
-		var collapse = (i < 2) ? " in" : ""; // open first two tabs
+		var collapse = (i < 5) ? " in" : ""; // open 5 tabs
 		$('#nyt-accordion').append('<div class="panel panel-primary">' +
 					    '<div class="panel-heading">' +
 					    '<h4 class="panel-title">' +
@@ -204,7 +201,7 @@ var updateNYT = function(city) {
 
     // request resource
     $.ajax({
-	url: 'nyt-json?' + 'city=' + city,
+	url: 'nyt-json?' + 'city=' + currentCity.name + ' ' + currentCity.country,
 	dataType: 'json',
 	success: function(response) {
 	    updateNYTScreen(response['nyt-json']);
@@ -223,15 +220,15 @@ var updateNYT = function(city) {
 
 
 // updateWeather updates #weather-group with weather data
-var updateWeather = function(lat, lon, unit) {
+var updateWeather = function(unit) {
     // update screen using resource
     var updateWeatherScreen = function(response) {
 	$('#weather-group').empty();
 	var days = response['list']
-	var unitSign = '&degF'
+	var unitSign = '&degF' // default unit is degF
 	for (i = 0; i < days.length; i++) {
 	    var temp = String(days[i]['temp']['day']);
-	    if (unit == 'C') {
+	    if (unit == 'C') { // select temperature units
 		temp = (temp - 32) * 5 / 9;
 		unitSign = '&degC'
 	    }
@@ -253,7 +250,7 @@ var updateWeather = function(lat, lon, unit) {
 
     // request resource
     $.ajax({
-	url: 'weather-json?lat=' + lat + '&lon=' + lon,
+	url: 'weather-json?lat=' + currentCity.loc['lat'] + '&lon=' + currentCity.loc['lng'],
 	dataType: "json",
 	success: function(response) {
 	    updateWeatherScreen(response['weather-json']);
@@ -263,14 +260,12 @@ var updateWeather = function(lat, lon, unit) {
 	$('#weather-group').append('<span class="label label-warning">No weather data</span>');
     });
 }; // END updateWeather
-
-
 // -------------------------------------------------------------------------------------------------
 
 
 // given the latitude and longitude, update the "local time" display
-var updateTime = function(lat, lng) {
-
+var updateTime = function() {
+    // refreshed screen
     var updateTimeScreen = function(response) {
 	$('#local-time').empty();
         // show the local time as well as the time zone
@@ -285,7 +280,7 @@ var updateTime = function(lat, lng) {
     // If this fails, the time display has already been cleared.
     var getTime = function() {
 	$.ajax({
-            url: "time-json?" + 'lat=' + lat + '&lng=' + lng,
+            url: "time-json?" + 'lat=' + currentCity.loc['lat'] + '&lng=' + currentCity.loc['lng'],
             dataType: "json",
             success: function(response) {
 		updateTimeScreen(response);
@@ -293,7 +288,7 @@ var updateTime = function(lat, lng) {
 	    error: function () {
                 setTimeout(function () {
                     getTime();
-                }, 2000)
+                }, 2000) // repeat request if no response after 2 seconds
             }
 	});
     }
@@ -310,21 +305,19 @@ var updateTime = function(lat, lng) {
 
 
 // runs if user input is valid to update screen components
-var updateScreen = function(city) {
-    var lat = city.loc['lat'];
-    var lon = city.loc['lng'];
+var updateScreen = function() {
     
     // methods
     updateCityTitle();
-    updateWiki(city.name);
-    updateCityDescription(city.name);
-    updateTime(lat, lon);
-    updateTwitter(city.name);
-    updateNYT(city.name + " " + city.country);
-    updateWeather(lat, lon, 'F');
+    updateWiki();
+    updateCityDescription();
+    updateTime();
+    updateTwitter();
+    updateNYT();
+    updateWeather('F');
  
-    // Replace with Google maps
-    $('#gmaps-link').attr('href', 'https://www.google.com/maps/place/' + city.name);
+    // Set link to google maps
+    $('#gmaps-link').attr('href', 'https://www.google.com/maps/place/' + currentCity.name);
     $('#gmaps-link').html("Google Maps " + currentCity.name)
 };
 
@@ -364,7 +357,7 @@ var validateCity = function(userInput) {
             pageFail();
         } else {
             currentCity = city_from_json(city_json);
-            updateScreen(currentCity);
+            updateScreen();
         }
     },
 	error: function(jqXHR, textStatus, errorThrown) {
@@ -386,15 +379,6 @@ var randomCity = function() {
 	});
     }
     getRandom();
-
-    // testing only ///////////////////////////////
-    /*
-    var i = 0;
-    setInterval(function(){
-	getRandom();
-	i++;
-    }, 3000);
-    *//////////////////////////////////////////////
 }
 
 
@@ -447,12 +431,12 @@ $(function() {
 
     // weather to deg C
     $('#degC-button').on('click', function() {
-	updateWeather(currentCity.loc['lat'], currentCity.loc['lng'], 'C');
+	updateWeather('C');
     });
 
      // weather to deg C
     $('#degF-button').on('click', function() {
-	updateWeather(currentCity.loc['lat'], currentCity.loc['lng'], 'F');
+	updateWeather('F');
     });
 
     // start with random city
