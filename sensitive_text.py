@@ -2,21 +2,41 @@
 import re
 from resources.explicit.excluded_words import excluded_words
 
+
+
+"""
+Determine if the given string contains any sensitive words.
+"""
 def sensitive_text(text_input):
     parsed_input = re.split(";|,|\*|\n|#|\\\\|\.|\?|@| ?", text_input)
+
     # cycle all words and check if sensitive
-    for word in parsed_input:
-        if sensitive_word(word) == True:
-            return True
-    return False
+    return any(sensitive_word(word) for word in parsed_input)
 
+
+"""
+Determine if the given string is found in the set of sensitive words.
+
+"""
 def sensitive_word(word):
-    if word.lower() in excluded_words:
-        return True
-    return False
+    return word.lower() in _sensitive_word_set
 
-# run just once to populate list of word to be excluded
-def populate_bad_words():
+
+
+
+# The immutable set of words that should be considered sensitive.
+
+# A frozenset is used instead of a list because inclusion in a frozenset can
+# be tested in constant time.
+_sensitive_word_set = frozenset(excluded_words)
+
+
+# Create a python module that provides a list of sensitive words.
+# The module is written to "resources/explicit/excluded_words.py".
+#
+# Run just once to populate the list.
+#
+def _populate_bad_words():
     excluded_words = []
     # list 1
     excluded_words += bad_list
@@ -34,4 +54,4 @@ def populate_bad_words():
     file.close()
 
 if __name__ == '__main__':
-    populate_bad_words()
+    _populate_bad_words()
