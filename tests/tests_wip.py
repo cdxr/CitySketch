@@ -51,6 +51,8 @@ def test_sensitive_text():
     assert(sensitive_text(input_text) == True) # "test_sensitive_text test 8"
     input_text = '#  #'
     assert(sensitive_text(input_text) == False) # "test_sensitive_text test 9"
+    input_text = 'Basdfsdaf, is; @mas?besafdtter*massage.any#   ok #bus8'
+    assert(sensitive_text(input_text) == True) # "test_sensitive_text test 8"
 
 def test_7():
     pass

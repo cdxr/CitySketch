@@ -46,7 +46,7 @@ def _populate_bad_words():
     excluded_words += bad_list2
     excluded_words.sort()
     # output to file
-    file = open('resources/explicit/excluded_words.py', 'w')
+    file = open('resources/explicit/shutterstock-github/excluded_words.py', 'w')
     file.write('excluded_words = [')
     for word in excluded_words:
         file.write("\'" + word + "\',")

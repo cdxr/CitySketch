@@ -151,6 +151,6 @@ def submit_message():
     return render_template('index.html')
 
 if __name__ == '__main__':
-  app.debug = True # used for dev only
+  app.debug = False # True used for dev only
   host = '0.0.0.0'
   app.run(host)
