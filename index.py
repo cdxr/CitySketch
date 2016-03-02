@@ -73,16 +73,18 @@ def weather_json():
 @app.route('/wiki-json', methods=['GET'])
 def wiki_json():
     city_name = request.args.get('city')
+    country_name = request.args.get('country')
 
-    result = external._lookup_wikipedia(city_name)
+    result = external._lookup_wikipedia(city_name, country_name)
     return jsonify({'wiki-json': result})
 
 # return NYT json
 @app.route('/nyt-json', methods=['GET'])
 def nyt_json():
     city_name = request.args.get('city')
+    country_name = request.args.get('country')
 
-    result = external._lookup_nyt(city_name)
+    result = external._lookup_nyt(city_name, country_name)
     return jsonify({'nyt-json': result})
 
 # return current time json
@@ -93,6 +95,9 @@ def time_json():
     location = Location(lat,lng)
     
     local_time = external._lookup_time(location)
+
+    if local_time is None:
+        return jsonify(None)
 
     return jsonify({
         'time':      local_time.as_string(),
@@ -116,8 +121,9 @@ def autocomplete():
 # return city description json
 @app.route('/city-description', methods=['GET'])
 def city_description():
-    city = request.args.get('city')
-    response = city_desc._get(city)
+    city_name = request.args.get('city')
+    country_name = request.args.get('country')
+    response = city_desc.get_city_description(city_name, country_name)
     return json.dumps(response)
 
 

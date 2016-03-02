@@ -114,12 +114,13 @@ def _lookup_weather(location):
 Use the Wikipedia API to retrieve information for the given city.
 Returns a dictionary on success, None on failure.
 """
-def _lookup_wikipedia(city_name):
+def _lookup_wikipedia(city_name, country_name):
     url = 'https://en.wikipedia.org/w/api.php'
     params = {
         'action': 'opensearch',
-        'search': city_name,
-        'format': 'json'
+        'search': city_name + ', ' + country_name,
+        'format': 'json',
+        'redirects': 'resolve'  # necessary to handle page redirects
     }
 
     return _make_request(url, params)
@@ -129,12 +130,12 @@ def _lookup_wikipedia(city_name):
 Use the New York Times API to retrieve news information for the given city.
 Returns a dictionary on success, None on failure.
 """
-def _lookup_nyt(city_name):
+def _lookup_nyt(city_name, country_name):
     NYT_API_KEY = '532e9278d93c9c359096abdbbf5d65fd:14:74311752'
 
     url = 'http://api.nytimes.com/svc/search/v2/articlesearch.json'
     params = {
-        'q': city_name,
+        'q': city_name + ' ' + country_name,
         'sort': 'newest',
         'api-key': NYT_API_KEY,
     }
