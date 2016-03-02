@@ -123,12 +123,14 @@ var updateWiki = function() {
 // Update twitter feed
 var updateTwitter = function() {
     var city = currentCity.name;
+    var lat = currentCity.loc['lat'];
+    var lng = currentCity.loc['lng'];
     // empty targets
     $('#twitter-content').empty();
     $('#twitter-link').empty();
     // Make a request for the description.
    $.ajax({
-       url: "twitter-json?" + 'city=' + city,
+       url: "twitter-json?" + 'city=' + city + '&lat=' + lat + '&lng=' + lng,
        dataType: "json",
        success: function(response) {
 	   $('#twitter-link').append('<a href="https://twitter.com/search?q=' + city + '" target="_blank">' +

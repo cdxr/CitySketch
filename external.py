@@ -175,8 +175,8 @@ def _lookup_time(location):
 """
 Use twitter API and oauth2 authetication to obtain twitter search results
 """
-def _lookup_twitter(city):
-    return twitter.get_twitter(city)
+def _lookup_twitter(city, location):
+    return twitter.get_twitter(city, location)
 
 
 """

@@ -125,7 +125,11 @@ def city_description():
 @app.route('/twitter-json', methods=['GET'])
 def twitter_json():
     city = request.args.get('city')
-    result = external._lookup_twitter(city)
+    lat = request.args.get('lat')
+    lng = request.args.get('lng')
+    location = Location(lat,lng)
+    
+    result = external._lookup_twitter(city, location)
     return jsonify({'twitter-json': result})
 
 

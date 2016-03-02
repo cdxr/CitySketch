@@ -9,11 +9,17 @@ from sensitive_text import sensitive_text
 """
 Use twitter API and oauth2 authetication to obtain twitter search results
 """
-def get_twitter(city):
+def get_twitter(city, location):
     if city not in valid_cities.twitter_ban: #city in valid_cities.tested_list:
-        query = city
+        geo_string = ','.join([str(location.lat), str(location.lng), '50mi'])
         count = '130'
-        url = 'https://api.twitter.com/1.1/search/tweets.json?q=%23' + query + '&count=' + count
+        param_string = ''.join([
+                        '?q=%23', city,           # search for "#city"
+                        '&geocode=', geo_string,  # constrain using geolocation
+                        '&count=', count,         # limit the number of results
+                        '&lang=en'                # English language
+                        ])
+        url = 'https://api.twitter.com/1.1/search/tweets.json' + param_string
         key = '4898127648-hImwrcGlSCMqYvKIFl5BCZXAZAWunJ7FAtsrHYO'
         secret = 'BcvtY6dYTlzFboKjQXtfaQYGHNZrZSJebzA3FzQVdXSiq'
         return oauth_req(url, key, secret)
@@ -64,4 +70,3 @@ def parse_twitter(raw):
         except:
             pass #possible sensitive content
     return response
-
