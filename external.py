@@ -114,11 +114,11 @@ def _lookup_weather(location):
 Use the Wikipedia API to retrieve information for the given city.
 Returns a dictionary on success, None on failure.
 """
-def _lookup_wikipedia(city_name, country_name):
+def _lookup_wikipedia(city_name, country_name = False):
     url = 'https://en.wikipedia.org/w/api.php'
     params = {
         'action': 'opensearch',
-        'search': city_name + ', ' + country_name,
+        'search': city_name if (country_name == False) else city_name + ', ' + country_name,
         'format': 'json',
         'redirects': 'resolve'  # necessary to handle page redirects
     }

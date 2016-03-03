@@ -7,6 +7,7 @@ import email_support
 import external
 import valid_cities
 from sensitive_text import sensitive_text
+from city_desc import get_city_description
 
 def test_gmaps(city):
     return external._gmaps_lookup_city(city)
@@ -54,9 +55,13 @@ def test_sensitive_text():
     input_text = 'Basdfsdaf, is; @mas?besafdtter*massage.any#   ok #bus8'
     assert(sensitive_text(input_text) == True) # "test_sensitive_text test 8"
 
-def test_7():
-    pass
-
+def test_city_desc():
+    response = get_city_description("New York", "United States")
+    assert((response['url'] != None and response['title'] != None and \
+           response['text'] != None) == True) # test_city_desc test #1
+    response = get_city_description("Paris", "France")
+    assert((response['url'] != None and response['title'] != None and \
+           response['text'] != None) == True) # test_city_desc test #1
 
 
 if __name__ == "__main__":
@@ -64,5 +69,5 @@ if __name__ == "__main__":
     #print(test_autocomplete())
     #print(test_twitter("paris"))
     test_sensitive_text()
-    test_7()
+    test_city_desc()
     

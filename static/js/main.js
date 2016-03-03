@@ -1,6 +1,5 @@
 /* Filename: main.js
  * Author: Adam Novotny
- * Last update: 2/13/2016
  * Purpose: Loads jQuery main function once all other resources are loaded
 */
 
@@ -35,6 +34,7 @@ var updateCityTitle = function() {
 	}
     })
 }
+// ------------------------------------------------------------------------
 
 
 // given the city name, update description in jumbotron
@@ -68,7 +68,6 @@ var updateCityDescription = function() {
 // -------------------------------------------------------------------------------------------------
 
 
-// ------------------------------------------------------------------------
 // updateWiki updates #wiki-accordion with wiki search articles
 var updateWiki = function() {
     // update screen using resource
@@ -219,8 +218,6 @@ var updateNYT = function() {
 					'No connection to NYT</h4></div></div>');
     });
 }; // END updateNYT
-
-
 // -------------------------------------------------------------------------------------------------
 
 
@@ -307,7 +304,6 @@ var updateTime = function() {
 
 
 // helper functions --------------------------------------------------------------------------------------
-
 
 // runs if user input is valid to update screen components
 var updateScreen = function() {
