@@ -39,11 +39,13 @@ var updateCityTitle = function() {
 
 // given the city name, update description in jumbotron
 var updateCityDescription = function() {
-
     // Make a request for the description.
     var setText = function() {
+       var city = currentCity.name;
+       var country = currentCity.country;
+
        $.ajax({
-	   url: "city-description?" + 'city=' + currentCity.name,
+	   url: 'city-description?city=' + city + '&country=' + country,
 	   dataType: "json",
 	   success: function(response) {
 	       $('#city-description').empty();
@@ -69,42 +71,43 @@ var updateCityDescription = function() {
 // ------------------------------------------------------------------------
 // updateWiki updates #wiki-accordion with wiki search articles
 var updateWiki = function() {
-    var city = currentCity.name;
-
     // update screen using resource
     var updateWikiScreen = function(response) {
-	$('#wiki-accordion').empty();
-	if (response[1].length != 0) {	 	    
-	    for (i = 0; i < response[1].length; i++) {
-		// parse response and update wiki-accordion
-		var title = response[1][i];
-		var contents = response[2][i] + '<a href="' + 
-		    response[3][i] + '" target="_blank"> [details]</a>';
-		var collapse = (i < 2) ? " in" : ""; // open first two tabs
-		$('#wiki-accordion').append('<div class="panel panel-primary">' +
-					    '<div class="panel-heading">' +
-					    '<h4 class="panel-title">' +
-					    '<a data-toggle="collapse" data-parent="#accordion"' + 
-					    'href="#collapse-wiki' + i + '">' +
-					    title + '</a></h4></div>' +
-					    '<div id="collapse-wiki' + i + 
-					    '" class="panel-collapse collapse' + collapse  + '">' +
-					    '<div class="panel-body"><p>' +
-					    contents + '</p></div></div></div>');
-	    }
-	}
-	else {
-	    $('#wiki-accordion').empty();
-	    $('#wiki-accordion').append('<div class="panel panel-warning">' +
-					'<div class="panel-heading">' +
-					'<h4 class="panel-title">' +
-					'No Wiki articles - invalid input</h4></div></div>');
-	}
+        $('#wiki-accordion').empty();
+        if (response[1].length != 0) {	 	    
+            for (i = 0; i < response[1].length; i++) {
+            // parse response and update wiki-accordion
+            var title = response[1][i];
+            var details_link = response[2][i] + '<a href="' + 
+                response[3][i] + '" target="_blank"> [details]</a>';
+            var collapse = (i < 2) ? " in" : ""; // open first two tabs
+            $('#wiki-accordion').append('<div class="panel panel-primary">' +
+                            '<div class="panel-heading">' +
+                            '<h4 class="panel-title">' +
+                            '<a data-toggle="collapse" data-parent="#accordion"' + 
+                            'href="#collapse-wiki' + i + '">' +
+                            title + '</a></h4></div>' +
+                            '<div id="collapse-wiki' + i + 
+                            '" class="panel-collapse collapse' + collapse  + '">' +
+                            '<div class="panel-body"><p>' +
+                            details_link + '</p></div></div></div>');
+            }
+        }
+        else {
+            $('#wiki-accordion').empty();
+            $('#wiki-accordion').append('<div class="panel panel-warning">' +
+                        '<div class="panel-heading">' +
+                        '<h4 class="panel-title">' +
+                        'No Wiki articles - invalid input</h4></div></div>');
+        }
     };
+
+    var city = currentCity.name;
+    var country = currentCity.country;
 
     // request resource
     $.ajax({
-	url: "wiki-json?" + 'city=' + city,
+	url: 'wiki-json?city=' + city + '&country=' + country,
 	dataType: "json",
 	success: function(response) {
 	    updateWikiScreen(response['wiki-json']);
@@ -123,12 +126,14 @@ var updateWiki = function() {
 // Update twitter feed
 var updateTwitter = function() {
     var city = currentCity.name;
+    var lat = currentCity.loc['lat'];
+    var lng = currentCity.loc['lng'];
     // empty targets
     $('#twitter-content').empty();
     $('#twitter-link').empty();
     // Make a request for the description.
    $.ajax({
-       url: "twitter-json?" + 'city=' + city,
+       url: "twitter-json?" + 'city=' + city + '&lat=' + lat + '&lng=' + lng,
        dataType: "json",
        success: function(response) {
 	   $('#twitter-link').append('<a href="https://twitter.com/search?q=' + city + '" target="_blank">' +
@@ -169,39 +174,39 @@ var updateTwitter = function() {
 var updateNYT = function() {
     // update screen using resource
     var updateNYTScreen = function(response) {
-	//console.log(response['response']['docs']);
-	$('#nyt-accordion').empty();
-	if (response['response']['docs'].length != 0) {	 
-	    for (i = 0; i < response['response']['docs'].length; i++) {
-		var article = response['response']['docs'][i]
-		var title = article['headline']['main'];
-		var contents = article['snippet'] + '<a href="' + 
-		    article['web_url'] + '" target="_blank"> [details]</a>';
-		var collapse = (i < 5) ? " in" : ""; // open 5 tabs
-		$('#nyt-accordion').append('<div class="panel panel-primary">' +
-					    '<div class="panel-heading">' +
-					    '<h4 class="panel-title">' +
-					    '<a data-toggle="collapse" data-parent="#accordion"' + 
-					    'href="#collapse-nyt' + i + '">' +
-					    title + '</a></h4></div>' +
-					    '<div id="collapse-nyt' + i + 
-					    '" class="panel-collapse collapse' + collapse  + '">' +
-					    '<div class="panel-body"><p>' +
-					    contents + '</p></div></div></div>');
-	    }
-	}
-	else {
-	    $('#nyt-accordion').append('<div class="panel panel-warning">' +
-					'<div class="panel-heading">' +
-					'<h4 class="panel-title">' +
-					'No NYT articles - invalid input</h4></div></div>');
-	}
-	
+        $('#nyt-accordion').empty();
+        if (response['response']['docs'].length != 0) {	 
+            for (i = 0; i < response['response']['docs'].length; i++) {
+            var article = response['response']['docs'][i]
+            var title = article['headline']['main'];
+            var contents = article['snippet'] + '<a href="' + 
+                article['web_url'] + '" target="_blank"> [details]</a>';
+            var collapse = (i < 5) ? " in" : ""; // open 5 tabs
+            $('#nyt-accordion').append('<div class="panel panel-primary">' +
+                            '<div class="panel-heading">' +
+                            '<h4 class="panel-title">' +
+                            '<a data-toggle="collapse" data-parent="#accordion"' + 
+                            'href="#collapse-nyt' + i + '">' +
+                            title + '</a></h4></div>' +
+                            '<div id="collapse-nyt' + i + 
+                            '" class="panel-collapse collapse' + collapse  + '">' +
+                            '<div class="panel-body"><p>' +
+                            contents + '</p></div></div></div>');
+            }
+        } else {
+            $('#nyt-accordion').append('<div class="panel panel-warning">' +
+                        '<div class="panel-heading">' +
+                        '<h4 class="panel-title">' +
+                        'No NYT articles - invalid input</h4></div></div>');
+        }
     };
+
+    var city = currentCity.name;
+    var country = currentCity.country;
 
     // request resource
     $.ajax({
-	url: 'nyt-json?' + 'city=' + currentCity.name + ' ' + currentCity.country,
+	url: 'nyt-json?city=' + city + '&country=' + country,
 	dataType: 'json',
 	success: function(response) {
 	    updateNYTScreen(response['nyt-json']);
