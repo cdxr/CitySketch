@@ -10,11 +10,15 @@ from sensitive_text import sensitive_text
 Use twitter API and oauth2 authetication to obtain twitter search results
 """
 def get_twitter(city, location):
-    if city not in valid_cities.twitter_ban: #city in valid_cities.tested_list:
+    if city not in valid_cities.twitter_ban:
+        # create a hashtag by removing all spaces and prepending a '#'
+        #  (e.g. "Los Angeles" becomes "#LosAngeles")
+        hashtag = '%23' + city.replace(' ', '')
+
         geo_string = ','.join([str(location.lat), str(location.lng), '50mi'])
         count = '130'
         param_string = ''.join([
-                        '?q=%23', city,           # search for "#city"
+                        '?q=', hashtag,           # search for the city hashtag
                         '&geocode=', geo_string,  # constrain using geolocation
                         '&count=', count,         # limit the number of results
                         '&lang=en'                # English language
